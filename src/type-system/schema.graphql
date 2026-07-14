@@ -1,0 +1,226 @@
+type Query {
+    # Usuarios
+    Usuarios(id_usr: Int): [Usuario]
+    
+    # Roles
+    Roles(id_rol: Int): [Rol]
+    
+    # Funciones
+    Funciones(id_fnc: Int): [Funcion]
+    
+    # Personas
+    Personas(cedula_per: String): [Persona]
+    
+    # Alquileres
+    Alquileres(cod_alq: String): [Alquiler]
+    
+    # Departamento
+    Departamentos(codigo_dpto: String): [Departamento]
+    
+    # Detalle_Alquiler
+    DetallesAlquiler(id_det: Int): [DetalleAlquiler]
+}
+
+type Mutation {
+    # Usuarios
+    createUsuario(usuario: inputUsuario!): Usuario
+    updateUsuario(usuario: inputUsuarioUpdate!): Usuario
+    deleteUsuario(id_usr: Int!): Usuario
+
+    # Roles
+    createRol(rol: inputRol!): Rol
+    updateRol(rol: inputRolUpdate!): Rol
+    deleteRol(id_rol: Int!): Rol
+
+    # Funciones
+    createFuncion(funcion: inputFuncion!): Funcion
+    updateFuncion(funcion: inputFuncionUpdate!): Funcion
+    deleteFuncion(id_fnc: Int!): Funcion
+
+    # Personas
+    createPersona(persona: inputPersona!): Persona
+    updatePersona(persona: inputPersonaUpdate!): Persona
+    deletePersona(cedula_per: String!): Persona
+
+    # Alquileres
+    createAlquiler(alquiler: inputAlquiler!): Alquiler
+    updateAlquiler(alquiler: inputAlquilerUpdate!): Alquiler
+    deleteAlquiler(cod_alq: String!): Alquiler
+
+    # Departamento
+    createDepartamento(departamento: inputDepartamento!): Departamento
+    updateDepartamento(departamento: inputDepartamentoUpdate!): Departamento
+    deleteDepartamento(codigo_dpto: String!): Departamento
+
+    # Detalle_Alquiler
+    createDetalleAlquiler(detalle: inputDetalleAlquiler!): DetalleAlquiler
+    updateDetalleAlquiler(detalle: inputDetalleAlquilerUpdate!): DetalleAlquiler
+    deleteDetalleAlquiler(id_det: Int!): DetalleAlquiler
+
+    # Roles_Funciones
+    asociarFuncionARol(id_rol: Int!, id_fnc: Int!): Boolean
+    desasociarFuncionDeRol(id_rol: Int!, id_fnc: Int!): Boolean
+}
+
+# --- Types ---
+
+type Usuario {
+    id_usr: Int!
+    username_usr: String!
+    password_usr: String!
+    estado_usr: Boolean!
+    id_rol: Int
+    rol: Rol
+}
+
+type Rol {
+    id_rol: Int!
+    nombre_rol: String!
+    funciones: [Funcion]
+}
+
+type Funcion {
+    id_fnc: Int!
+    nombre_fnc: String!
+    ruta_fnc: String!
+}
+
+type Persona {
+    cedula_per: String!
+    nombres_per: String!
+    apellidos_per: String!
+    telefono_per: String!
+    direccion_per: String!
+}
+
+type Alquiler {
+    cod_alq: String!
+    fecha_alq: String!
+    total_alq: Float!
+    estado_alq: String!
+    id_usr: Int!
+    usuario: Usuario
+    cedula_per: String!
+    persona: Persona
+    detalles: [DetalleAlquiler]
+}
+
+type Departamento {
+    codigo_dpto: String!
+    descripcion_dpto: String!
+    precio_dpto: Float!
+    estado_dpto: String!
+}
+
+type DetalleAlquiler {
+    id_det: Int!
+    precio_det: Float!
+    fecha_inicio_det: String!
+    fecha_fin_det: String!
+    cod_alq: String!
+    alquiler: Alquiler
+    codigo_dpto: String!
+    departamento: Departamento
+}
+
+# --- Inputs ---
+
+input inputUsuario {
+    username_usr: String!
+    password_usr: String!
+    estado_usr: Boolean!
+    id_rol: Int
+}
+
+input inputUsuarioUpdate {
+    id_usr: Int!
+    username_usr: String!
+    password_usr: String
+    estado_usr: Boolean!
+    id_rol: Int
+}
+
+input inputRol {
+    nombre_rol: String!
+}
+
+input inputRolUpdate {
+    id_rol: Int!
+    nombre_rol: String!
+}
+
+input inputFuncion {
+    nombre_fnc: String!
+    ruta_fnc: String!
+}
+
+input inputFuncionUpdate {
+    id_fnc: Int!
+    nombre_fnc: String!
+    ruta_fnc: String!
+}
+
+input inputPersona {
+    cedula_per: String!
+    nombres_per: String!
+    apellidos_per: String!
+    telefono_per: String!
+    direccion_per: String!
+}
+
+input inputPersonaUpdate {
+    cedula_per: String!
+    nombres_per: String!
+    apellidos_per: String!
+    telefono_per: String!
+    direccion_per: String!
+}
+
+input inputAlquiler {
+    cod_alq: String!
+    fecha_alq: String!
+    total_alq: Float!
+    estado_alq: String!
+    id_usr: Int!
+    cedula_per: String!
+}
+
+input inputAlquilerUpdate {
+    cod_alq: String!
+    fecha_alq: String!
+    total_alq: Float!
+    estado_alq: String!
+    id_usr: Int!
+    cedula_per: String!
+}
+
+input inputDepartamento {
+    codigo_dpto: String!
+    descripcion_dpto: String!
+    precio_dpto: Float!
+    estado_dpto: String!
+}
+
+input inputDepartamentoUpdate {
+    codigo_dpto: String!
+    descripcion_dpto: String!
+    precio_dpto: Float!
+    estado_dpto: String!
+}
+
+input inputDetalleAlquiler {
+    precio_det: Float!
+    fecha_inicio_det: String!
+    fecha_fin_det: String!
+    cod_alq: String!
+    codigo_dpto: String!
+}
+
+input inputDetalleAlquilerUpdate {
+    id_det: Int!
+    precio_det: Float!
+    fecha_inicio_det: String!
+    fecha_fin_det: String!
+    cod_alq: String!
+    codigo_dpto: String!
+}

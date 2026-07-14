@@ -1,0 +1,140 @@
+/* Estilos personalizados mínimos para el Layout del Dashboard */
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+#sidebar {
+    min-height: 100vh;
+    box-shadow: inset -1px 0 0 rgba(255, 255, 255, .15);
+    background-color: #212529 !important;
+}
+
+#sidebar .nav-link {
+    font-weight: 500;
+    color: #dee2e6;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    margin: 0.2rem 0.5rem;
+}
+
+#sidebar .nav-link:hover {
+    background-color: #343a40;
+    color: #fff;
+}
+
+#sidebar .nav-link.active {
+    color: #fff;
+    background-color: #0d6efd;
+}
+
+header {
+    margin-bottom: 1.5rem;
+}
+
+.table-responsive {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+/* --- MAESTRO-DETALLE LAYOUT --- */
+.master-list-container {
+    max-height: calc(100vh - 260px);
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Custom scrollbar for a cleaner look */
+.master-list-container::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.master-list-container::-webkit-scrollbar-track,
+.table-responsive::-webkit-scrollbar-track {
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+.master-list-container::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #ced4da;
+    border-radius: 4px;
+}
+.master-list-container::-webkit-scrollbar-thumb:hover,
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+/* Master list items */
+.master-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent !important;
+}
+
+.master-item:hover {
+    background-color: #f8f9fa;
+}
+
+.master-item.active {
+    background-color: #e7f1ff !important;
+    border-left-color: #0d6efd !important;
+}
+
+/* Empty State Detail View */
+.empty-state {
+    border: 2px dashed #dee2e6;
+    border-radius: 0.5rem;
+    padding: 4rem 2rem;
+    text-align: center;
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+/* Transaction Detail Section styling */
+.detail-card {
+    border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* --- PRINT UTILITIES & TEMPLATES --- */
+#general-print-template, #individual-print-template {
+    display: none;
+}
+
+@media print {
+    /* Ocultar elementos UI globales */
+    #sidebar, 
+    header, 
+    .btn, 
+    button {
+        display: none !important;
+    }
+    
+    main {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    body {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+
+    /* MODO: IMPRESIÓN GENERAL (Ocultar app y mostrar plantilla general) */
+    body.print-general-mode #app-container {
+        display: none !important;
+    }
+    body.print-general-mode #general-print-template {
+        display: block !important;
+    }
+
+    /* MODO: IMPRESIÓN INDIVIDUAL (Ocultar app y mostrar plantilla individual) */
+    body.print-individual-mode #app-container {
+        display: none !important;
+    }
+    body.print-individual-mode #individual-print-template {
+        display: block !important;
+    }
+}
+
+
