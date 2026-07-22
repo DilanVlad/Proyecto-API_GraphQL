@@ -16,9 +16,6 @@ type Query {
     
     # Departamento
     Departamentos(codigo_dpto: String): [Departamento]
-    
-    # Detalle_Alquiler
-    DetallesAlquiler(id_det: Int): [DetalleAlquiler]
 }
 
 type Mutation {
@@ -42,20 +39,17 @@ type Mutation {
     updatePersona(persona: inputPersonaUpdate!): Persona
     deletePersona(cedula_per: String!): Persona
 
-    # Alquileres
-    createAlquiler(alquiler: inputAlquiler!): Alquiler
-    updateAlquiler(alquiler: inputAlquilerUpdate!): Alquiler
-    deleteAlquiler(cod_alq: String!): Alquiler
+    # Autenticación
+    login(username_usr: String!, password_usr: String!): AuthPayload
 
+    # Alquileres
+    createAlquilerTransaccional(alquiler: inputAlquilerTransaccional!): Alquiler
+    deleteAlquiler(cod_alq: String!): Alquiler
+    
     # Departamento
     createDepartamento(departamento: inputDepartamento!): Departamento
     updateDepartamento(departamento: inputDepartamentoUpdate!): Departamento
     deleteDepartamento(codigo_dpto: String!): Departamento
-
-    # Detalle_Alquiler
-    createDetalleAlquiler(detalle: inputDetalleAlquiler!): DetalleAlquiler
-    updateDetalleAlquiler(detalle: inputDetalleAlquilerUpdate!): DetalleAlquiler
-    deleteDetalleAlquiler(id_det: Int!): DetalleAlquiler
 
     # Roles_Funciones
     asociarFuncionARol(id_rol: Int!, id_fnc: Int!): Boolean
@@ -176,24 +170,6 @@ input inputPersonaUpdate {
     direccion_per: String!
 }
 
-input inputAlquiler {
-    cod_alq: String!
-    fecha_alq: String!
-    total_alq: Float!
-    estado_alq: String!
-    id_usr: Int!
-    cedula_per: String!
-}
-
-input inputAlquilerUpdate {
-    cod_alq: String!
-    fecha_alq: String!
-    total_alq: Float!
-    estado_alq: String!
-    id_usr: Int!
-    cedula_per: String!
-}
-
 input inputDepartamento {
     codigo_dpto: String!
     descripcion_dpto: String!
@@ -208,19 +184,20 @@ input inputDepartamentoUpdate {
     estado_dpto: String!
 }
 
-input inputDetalleAlquiler {
-    precio_det: Float!
-    fecha_inicio_det: String!
-    fecha_fin_det: String!
-    cod_alq: String!
-    codigo_dpto: String!
+type AuthPayload {
+    token: String!
+    usuario: Usuario!
 }
 
-input inputDetalleAlquilerUpdate {
-    id_det: Int!
+input inputDetalleAlquilerItem {
+    codigo_dpto: String!
     precio_det: Float!
     fecha_inicio_det: String!
     fecha_fin_det: String!
-    cod_alq: String!
-    codigo_dpto: String!
+}
+
+input inputAlquilerTransaccional {
+    cedula_per: String!
+    fecha_alq: String!
+    detalles: [inputDetalleAlquilerItem!]!
 }

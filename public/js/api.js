@@ -4,17 +4,26 @@ const API_URL = 'http://localhost:4000/graphql';
 // --- GRAPHQL REQUEST CLIENT ---
 export async function graphqlQuery(query, variables = {}) {
     try {
+        const sessionData = localStorage.getItem('alquiler_session');
+        const token = sessionData ? JSON.parse(sessionData).token : null;
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
+            headers,
             body: JSON.stringify({
                 query,
                 variables
             })
         });
+
 
         const result = await response.json();
         if (result.errors) {

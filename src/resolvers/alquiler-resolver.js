@@ -1,6 +1,16 @@
 import { db } from '../config/db-connection.js';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+
+const SECRET_KEY = 'secret_key_alquileres_graphql_jwt';
+
+function hashPassword(pass) {
+    if (!pass) return pass;
+    return crypto.createHash('sha256').update(pass).digest('hex');
+}
 
 const alquilerResolver = {
+
     Query: {
         // Usuarios
         async Usuarios(root, { id_usr }) {
@@ -73,18 +83,6 @@ const alquilerResolver = {
             } catch (error) {
                 return error;
             }
-        },
-        // Detalle_Alquiler
-        async DetallesAlquiler(root, { id_det }) {
-            try {
-                if (id_det === undefined) {
-                    return await db.any('SELECT * FROM detalle_alquiler;');
-                } else {
-                    return await db.any('SELECT * FROM detalle_alquiler WHERE id_det = $1;', [id_det]);
-                }
-            } catch (error) {
-                return error;
-            }
         }
     },
 
@@ -93,10 +91,11 @@ const alquilerResolver = {
         async createUsuario(root, { usuario }) {
             try {
                 if (usuario === undefined) return null;
+                const pass = hashPassword(usuario.password_usr);
                 return await db.one(
                     `INSERT INTO usuarios(username_usr, password_usr, estado_usr, id_rol)
                      VALUES($1, $2, $3, $4) RETURNING *;`,
-                    [usuario.username_usr, usuario.password_usr, usuario.estado_usr, usuario.id_rol]
+                    [usuario.username_usr, pass, usuario.estado_usr, usuario.id_rol]
                 );
             } catch (error) {
                 return error;
@@ -106,11 +105,12 @@ const alquilerResolver = {
             try {
                 if (usuario === undefined) return null;
                 if (usuario.password_usr !== undefined && usuario.password_usr !== null && usuario.password_usr !== '') {
+                    const pass = hashPassword(usuario.password_usr);
                     return await db.one(
                         `UPDATE usuarios
                          SET username_usr = $2, password_usr = $3, estado_usr = $4, id_rol = $5
                          WHERE id_usr = $1 RETURNING *;`,
-                        [usuario.id_usr, usuario.username_usr, usuario.password_usr, usuario.estado_usr, usuario.id_rol]
+                        [usuario.id_usr, usuario.username_usr, pass, usuario.estado_usr, usuario.id_rol]
                     );
                 } else {
                     return await db.one(
@@ -228,32 +228,94 @@ const alquilerResolver = {
             }
         },
 
-        // Alquileres
-        async createAlquiler(root, { alquiler }) {
+        // Autenticación JWT
+        async login(root, { username_usr, password_usr }) {
             try {
-                if (alquiler === undefined) return null;
-                return await db.one(
-                    `INSERT INTO alquileres(cod_alq, fecha_alq, total_alq, estado_alq, id_usr, cedula_per)
-                     VALUES($1, $2, $3, $4, $5, $6) RETURNING *;`,
-                    [alquiler.cod_alq, alquiler.fecha_alq, alquiler.total_alq, alquiler.estado_alq, alquiler.id_usr, alquiler.cedula_per]
+                const passHash = hashPassword(password_usr);
+                const user = await db.oneOrNone(
+                    'SELECT * FROM usuarios WHERE username_usr = $1 AND (password_usr = $2 OR password_usr = $3);',
+                    [username_usr, password_usr, passHash]
                 );
+                if (!user) {
+                    throw new Error('Credenciales incorrectas.');
+                }
+                if (!user.estado_usr) {
+                    throw new Error('El usuario está inactivo.');
+                }
+                const token = jwt.sign(
+                    { id_usr: user.id_usr, username_usr: user.username_usr, id_rol: user.id_rol },
+                    SECRET_KEY,
+                    { expiresIn: '8h' }
+                );
+                return {
+                    token,
+                    usuario: user
+                };
             } catch (error) {
-                return error;
+                throw new Error(error.message || 'Error en autenticación.');
             }
         },
-        async updateAlquiler(root, { alquiler }) {
+
+
+        // Alquileres Transaccional
+        async createAlquilerTransaccional(root, { alquiler }, context) {
             try {
-                if (alquiler === undefined) return null;
-                return await db.one(
-                    `UPDATE alquileres
-                     SET fecha_alq = $2, total_alq = $3, estado_alq = $4, id_usr = $5, cedula_per = $6
-                     WHERE cod_alq = $1 RETURNING *;`,
-                    [alquiler.cod_alq, alquiler.fecha_alq, alquiler.total_alq, alquiler.estado_alq, alquiler.id_usr, alquiler.cedula_per]
-                );
+                let userId = context?.user?.id_usr;
+                if (!userId) {
+                    const admin = await db.oneOrNone('SELECT id_usr FROM usuarios WHERE estado_usr = true LIMIT 1;');
+                    userId = admin ? admin.id_usr : 1;
+                }
+
+                return await db.tx(async t => {
+                    const countResult = await t.one('SELECT COUNT(*) FROM alquileres;');
+                    const num = parseInt(countResult.count, 10) + 1;
+                    const cod_alq = `ALQ-${Date.now().toString().slice(-4)}${num}`;
+
+                    let total = 0;
+                    const detailRows = [];
+
+                    for (const item of alquiler.detalles) {
+                        const start = new Date(item.fecha_inicio_det);
+                        const end = new Date(item.fecha_fin_det);
+                        const diffTime = Math.abs(end - start);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                        const subtotal = diffDays * item.precio_det;
+                        total += subtotal;
+
+                        detailRows.push({
+                            codigo_dpto: item.codigo_dpto,
+                            precio_det: item.precio_det,
+                            fecha_inicio_det: item.fecha_inicio_det,
+                            fecha_fin_det: item.fecha_fin_det
+                        });
+                    }
+
+                    const newAlquiler = await t.one(
+                        `INSERT INTO alquileres(cod_alq, fecha_alq, total_alq, estado_alq, id_usr, cedula_per)
+                         VALUES($1, $2, $3, $4, $5, $6) RETURNING *;`,
+                        [cod_alq, alquiler.fecha_alq, total, 'Activo', userId, alquiler.cedula_per]
+                    );
+
+                    for (const item of detailRows) {
+                        await t.none(
+                            `INSERT INTO detalle_alquiler(precio_det, fecha_inicio_det, fecha_fin_det, cod_alq, codigo_dpto)
+                             VALUES($1, $2, $3, $4, $5);`,
+                            [item.precio_det, item.fecha_inicio_det, item.fecha_fin_det, cod_alq, item.codigo_dpto]
+                        );
+
+                        await t.none(
+                            `UPDATE departamento SET estado_dpto = 'Ocupado' WHERE codigo_dpto = $1;`,
+                            [item.codigo_dpto]
+                        );
+                    }
+
+                    return newAlquiler;
+                });
             } catch (error) {
-                return error;
+                throw new Error(error.message || 'Error al guardar la transacción de alquiler.');
             }
         },
+
         async deleteAlquiler(root, { cod_alq }) {
             try {
                 return await db.one('DELETE FROM alquileres WHERE cod_alq = $1 RETURNING *;', [cod_alq]);
@@ -296,49 +358,16 @@ const alquilerResolver = {
             }
         },
 
-        // Detalle_Alquiler
-        async createDetalleAlquiler(root, { detalle }) {
-            try {
-                if (detalle === undefined) return null;
-                return await db.one(
-                    `INSERT INTO detalle_alquiler(precio_det, fecha_inicio_det, fecha_fin_det, cod_alq, codigo_dpto)
-                     VALUES($1, $2, $3, $4, $5) RETURNING *;`,
-                    [detalle.precio_det, detalle.fecha_inicio_det, detalle.fecha_fin_det, detalle.cod_alq, detalle.codigo_dpto]
-                );
-            } catch (error) {
-                return error;
-            }
-        },
-        async updateDetalleAlquiler(root, { detalle }) {
-            try {
-                if (detalle === undefined) return null;
-                return await db.one(
-                    `UPDATE detalle_alquiler
-                     SET precio_det = $2, fecha_inicio_det = $3, fecha_fin_det = $4, cod_alq = $5, codigo_dpto = $6
-                     WHERE id_det = $1 RETURNING *;`,
-                    [detalle.id_det, detalle.precio_det, detalle.fecha_inicio_det, detalle.fecha_fin_det, detalle.cod_alq, detalle.codigo_dpto]
-                );
-            } catch (error) {
-                return error;
-            }
-        },
-        async deleteDetalleAlquiler(root, { id_det }) {
-            try {
-                return await db.one('DELETE FROM detalle_alquiler WHERE id_det = $1 RETURNING *;', [id_det]);
-            } catch (error) {
-                return error;
-            }
-        },
-
         // Roles_Funciones
         async asociarFuncionARol(root, { id_rol, id_fnc }) {
             try {
-                await db.none('INSERT INTO roles_funciones(id_rol, id_fnc) VALUES($1, $2);', [id_rol, id_fnc]);
+                await db.none('INSERT INTO roles_funciones(id_rol, id_fnc) VALUES($1, $2) ON CONFLICT DO NOTHING;', [id_rol, id_fnc]);
                 return true;
             } catch (error) {
                 return false;
             }
         },
+
         async desasociarFuncionDeRol(root, { id_rol, id_fnc }) {
             try {
                 await db.none('DELETE FROM roles_funciones WHERE id_rol = $1 AND id_fnc = $2;', [id_rol, id_fnc]);

@@ -16,5 +16,23 @@ const server = new ApolloServer({
     resolvers,
 });
 
-const { url } = await startStandaloneServer(server);
-console.log(`🚀 Server ready at ${url}`);
+import jwt from 'jsonwebtoken';
+
+const SECRET_KEY = 'secret_key_alquileres_graphql_jwt';
+
+const { url } = await startStandaloneServer(server, {
+    context: async ({ req }) => {
+        const auth = req.headers.authorization || '';
+        if (auth.startsWith('Bearer ')) {
+            const token = auth.substring(7);
+            try {
+                const user = jwt.verify(token, SECRET_KEY);
+                return { user };
+            } catch (err) {
+                return {};
+            }
+        }
+        return {};
+    }
+});
+console.log(`🚀 Server ready at ${url}`);

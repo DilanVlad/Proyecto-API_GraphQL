@@ -1,74 +1,135 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Alquileres</title>
-    <!-- Bootstrap 5 CSS (Light Mode default) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS v3 Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom styles -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- Global Error Overlay -->
+    <script>
+        window.onerror = function (msg, url, lineNo, columnNo, error) {
+            var errDiv = document.getElementById('global-js-error');
+            if (!errDiv) {
+                errDiv = document.createElement('div');
+                errDiv.id = 'global-js-error';
+                errDiv.className = 'fixed top-0 left-0 right-0 z-[99999] bg-rose-600 text-white p-4 font-sans text-sm font-semibold shadow-xl border-b border-rose-700 flex items-start justify-between';
+                errDiv.innerHTML = '<div>⚠️ <strong class="font-bold">ERROR DE JAVASCRIPT:</strong> ' + msg + ' <br><small class="text-rose-200 text-xs font-normal">' + (url || '') + ':' + lineNo + '</small></div>';
+                document.body.appendChild(errDiv);
+            }
+        };
+        window.addEventListener('unhandledrejection', function (event) {
+            var message = event.reason ? (event.reason.message || event.reason) : 'Promesa rechazada no capturada';
+            window.onerror(message, '', 0, 0, null);
+        });
+    </script>
 </head>
-<body class="bg-light">
+
+<body class="bg-slate-50 text-slate-800 antialiased h-screen overflow-hidden">
 
     <!-- Login Container Wrapper -->
-    <div id="login-container" class="d-flex align-items-center justify-content-center min-vh-100 d-none">
-        <div class="container py-5">
-            <div class="row justify-content-center">
-                <div class="col-md-5 col-lg-4">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body p-4" id="login-view-wrapper">
-                            <!-- Formulario de login cargado por JS -->
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div id="login-container" class="flex items-center justify-center min-h-screen bg-slate-50 px-4">
+        <div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-100 p-8" id="login-view-wrapper">
+            <!-- Formulario de login cargado por JS -->
         </div>
     </div>
 
     <!-- Application Container (Dashboard) -->
-    <div id="app-container" class="container-fluid d-none p-0">
-        <div class="row g-0">
-            <!-- Sidebar Navigation (Dark) -->
-            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark text-white min-vh-100 p-0">
-                <div class="p-3 border-bottom border-secondary bg-dark text-white">
-                    <h5 class="m-0 font-weight-bold">Alquileres App</h5>
+    <div id="app-container" class="hidden h-screen overflow-hidden flex flex-col md:flex-row">
+        <!-- Sidebar Navigation (Dark) -->
+        <aside id="sidebar"
+            class="w-full md:w-64 bg-[#0f172a] text-slate-300 flex flex-col border-r border-slate-800 shrink-0">
+            <!-- Brand Section -->
+            <div class="p-6 border-b border-slate-800 flex items-center space-x-3 bg-[#0b1329]">
+                <div
+                    class="h-9 w-9 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md shadow-indigo-600/20">
+                    R
                 </div>
-                <div class="position-sticky pt-3">
-                    <ul class="nav flex-column" id="menu-items">
-                        <!-- Items de menú cargados dinámicamente -->
-                    </ul>
+                <div>
+                    <h1 class="text-white font-bold leading-none text-sm tracking-wide">Sistema Alquileres</h1>
+                    <span class="text-[10px] text-slate-500 font-semibold tracking-wider uppercase">
+                    </span>
                 </div>
-            </nav>
+            </div>
 
-            <!-- Main Content Area -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 p-0">
-                <!-- Top Header (Stuck to top) -->
-                <header class="d-flex justify-content-between align-items-center p-3 border-bottom bg-white w-100 sticky-top">
-                    <h1 class="h4 text-secondary m-0 font-weight-bold" id="view-title">Dashboard</h1>
-                    <div class="d-flex align-items-center">
-                        <span class="me-3 text-muted" id="user-display">Usuario: ...</span>
-                        <button class="btn btn-outline-danger btn-sm" id="btn-logout">Cerrar Sesión</button>
-                    </div>
-                </header>
+            <!-- Dynamic Navigation Menu -->
+            <div class="flex-1 overflow-y-auto px-4 py-6">
+                <ul class="space-y-1.5" id="menu-items">
+                    <!-- Items de menú cargados dinámicamente -->
+                </ul>
+            </div>
 
-                <!-- Dynamic View Wrapper with padding -->
-                <div class="p-4">
-                    <div class="card shadow-sm border-0 bg-white p-4">
-                        <div id="app-content">
-                            <!-- Contenido dinámico cargado por JS -->
-                        </div>
+            <!-- User Profile Bottom Bar -->
+            <div class="p-4 border-t border-slate-700/50 bg-[#0b1329]">
+                <!-- Profile row -->
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="h-10 w-10 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-white text-sm shadow-lg shadow-indigo-600/20 shrink-0" id="user-avatar">
+                        U
                     </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-bold text-white truncate uppercase tracking-widest" id="user-display">USUARIO</p>
+                        <p class="text-[10px] text-slate-500 font-semibold mt-0.5">Sesión activa</p>
+                    </div>
+                </div>
+                <!-- Logout button full-width -->
+                <button id="btn-logout"
+                    class="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl bg-slate-800 hover:bg-rose-600/10 border border-slate-700 hover:border-rose-600/30 text-slate-400 hover:text-rose-400 text-xs font-bold transition-all group">
+                    <svg class="h-3.5 w-3.5 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                    </svg>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col min-w-0">
+            <!-- Top Header -->
+            <header
+                class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 md:px-8 sticky top-0 z-10 shrink-0">
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Sistema de Alquileres</span>
+                    <span class="text-slate-300">/</span>
+                    <h2 class="text-sm font-semibold text-slate-800" id="view-title">Dashboard</h2>
+                </div>
+
+            </header>
+
+            <!-- Dynamic View Wrapper -->
+            <main class="flex-1 p-6 md:p-8 bg-slate-50 flex flex-col h-full overflow-hidden">
+                <div class="max-w-7xl mx-auto w-full flex-1 flex flex-col h-full overflow-y-auto custom-scrollbar pr-2" id="app-content">
+                    <!-- Contenido dinámico cargado por JS -->
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Contenedores para Plantillas de Impresión PDF -->
-    <div id="general-print-template"></div>
-    <div id="individual-print-template"></div>
+    <!-- Contenedores para Plantillas de Impresión PDF (Ocultos de la vista normal) -->
+    <div id="general-print-template" class="hidden"></div>
+    <div id="individual-print-template" class="hidden"></div>
 
     <!-- Main Module Script -->
     <script type="module" src="js/app.js"></script>
 </body>
+
 </html>
