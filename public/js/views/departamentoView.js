@@ -107,7 +107,7 @@ export function departamentoFormTemplate(dpto = null) {
                     </div>
                     <div>
                         <label for="precio_dpto" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Precio Diario</label>
-                        <input type="number" step="0.01" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="precio_dpto" required value="${isEdit ? dpto.precio_dpto : ''}">
+                        <input type="number" step="0.01" min="0" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="precio_dpto" required value="${isEdit ? dpto.precio_dpto : ''}">
                     </div>
                 </div>
                 

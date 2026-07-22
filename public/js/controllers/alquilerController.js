@@ -147,6 +147,23 @@ async function showForm() {
     viewContainer.innerHTML = alquilerFormTemplate();
 
     document.getElementById('fecha_alq').valueAsDate = new Date();
+    
+    const todayStr = new Date().toISOString().split('T')[0];
+    document.getElementById('fecha_alq').min = todayStr;
+    
+    const fechaInicioDet = document.getElementById('fecha_inicio_det');
+    const fechaFinDet = document.getElementById('fecha_fin_det');
+    
+    fechaInicioDet.min = todayStr;
+    fechaFinDet.min = todayStr;
+
+    fechaInicioDet.addEventListener('change', (e) => {
+        const selectedStart = e.target.value || todayStr;
+        fechaFinDet.min = selectedStart;
+        if (fechaFinDet.value && fechaFinDet.value < selectedStart) {
+            fechaFinDet.value = '';
+        }
+    });
 
     try {
         const catalogos = await getFormCatalogos();

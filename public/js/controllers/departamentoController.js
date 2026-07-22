@@ -110,6 +110,11 @@ function showForm(dpto = null) {
             estado_dpto: document.getElementById('estado_dpto').value
         };
 
+        if (departamentoData.precio_dpto < 0) {
+            if (errDiv) { errDiv.textContent = 'El precio no puede ser negativo.'; errDiv.classList.remove('hidden'); }
+            return;
+        }
+
         try {
             if (dpto) { await updateDepartamentoMutation(departamentoData); } else { await createDepartamentoMutation(departamentoData); }
             loadListView();
