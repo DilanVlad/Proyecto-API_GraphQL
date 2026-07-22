@@ -117,6 +117,16 @@ function showForm(persona = null) {
             direccion_per: document.getElementById('direccion_per').value.trim()
         };
 
+        if (personaData.cedula_per.length < 10) {
+            if (errDiv) { errDiv.textContent = 'La Cédula/RUC debe tener al menos 10 dígitos.'; errDiv.classList.remove('hidden'); }
+            return;
+        }
+        
+        if (personaData.telefono_per.length < 10) {
+            if (errDiv) { errDiv.textContent = 'El teléfono debe tener 10 dígitos completos.'; errDiv.classList.remove('hidden'); }
+            return;
+        }
+
         try {
             if (persona) { await updatePersonaMutation(personaData); } else { await createPersonaMutation(personaData); }
             loadListView();
