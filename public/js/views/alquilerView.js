@@ -231,12 +231,8 @@ export function alquilerDetailTemplate(rental, canDelete) {
                 </div>
             </div>
 
-            <!-- Footer actions -->
             <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-end space-x-3 shrink-0">
                 <button class="px-4 py-2 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 text-xs font-bold transition-all active:scale-[0.99]" id="btn-close-detail">Cerrar</button>
-                ${canDelete ? `
-                    <button class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md shadow-rose-600/10 transition-all active:scale-[0.99]" id="btn-delete-rental">Eliminar Alquiler</button>
-                ` : ''}
             </div>
         </div>
     `;

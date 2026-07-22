@@ -127,19 +127,7 @@ function showDetail(rental) {
         renderPlaceholder();
     });
 
-    if (canDelete) {
-        document.getElementById('btn-delete-rental').addEventListener('click', async () => {
-            if (confirm(`¿Estás seguro de que deseas eliminar el alquiler ${rental.cod_alq}?`)) {
-                try {
-                    await deleteAlquilerMutation(rental.cod_alq);
-                    selectedRentalCod = null;
-                    await loadMasterDetailView();
-                } catch (err) {
-                    alert('Error al eliminar alquiler: ' + err.message);
-                }
-            }
-        });
-    }
+
 }
 
 async function showForm() {

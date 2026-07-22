@@ -20,8 +20,6 @@ export async function renderPermisos(container) {
     viewContainer = container;
     viewContainer.innerHTML = permisoLayoutTemplate();
 
-    document.getElementById('btn-nuevo-rol').addEventListener('click', () => showRolForm());
-    document.getElementById('btn-nueva-funcion').addEventListener('click', () => showFuncionForm());
     document.getElementById('btn-guardar-permisos').addEventListener('click', handleGuardarPermisos);
 
     await refreshData();

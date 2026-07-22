@@ -6,12 +6,6 @@ export function permisoLayoutTemplate() {
                 <h3 class="text-xl font-bold text-slate-800">Gestionar Permisos</h3>
                 <p class="text-xs text-slate-400 font-medium mt-0.5">Asigna las funciones del sistema para cada rol registrado.</p>
             </div>
-            <button class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl shadow-md shadow-emerald-600/10 active:scale-[0.99] transition-all flex items-center space-x-1.5 shrink-0" id="btn-nueva-funcion">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <span>Nueva Función</span>
-            </button>
         </div>
 
         <div id="permisos-alert" class="hidden p-4 mb-6 rounded-xl bg-rose-50 border border-rose-100 text-rose-700 text-xs font-semibold" role="alert"></div>
@@ -23,12 +17,6 @@ export function permisoLayoutTemplate() {
                 <!-- Header -->
                 <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
                     <h5 class="text-sm font-bold text-slate-800">Roles</h5>
-                    <button id="btn-nuevo-rol" class="flex items-center space-x-1 text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors px-2 py-1 rounded-lg hover:bg-indigo-50">
-                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                        <span>Nuevo Rol</span>
-                    </button>
                 </div>
 
                 <!-- Roles List -->
