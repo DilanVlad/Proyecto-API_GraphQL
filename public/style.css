@@ -1,10 +1,12 @@
 /* Estilos personalizados para el panel de Alquileres Premium */
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100vh !important;
-    width: 100vw !important;
-    overflow: hidden !important;
+@media screen {
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100vh !important;
+        width: 100vw !important;
+        overflow: hidden !important;
+    }
 }
 /* Personalización de scrollbar para listados y tablas */
 .custom-scrollbar::-webkit-scrollbar {

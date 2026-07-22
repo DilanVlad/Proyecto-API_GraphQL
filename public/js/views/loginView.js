@@ -5,7 +5,6 @@ export function loginFormTemplate() {
                 R
             </div>
             <h3 class="text-xl font-bold text-slate-800">Iniciar Sesión</h3>
-            <p class="text-xs text-slate-400 mt-1 font-medium">Consola de Operación RentManager</p>
         </div>
         
         <form id="login-form" class="space-y-4">
@@ -36,7 +35,6 @@ export function registerFormTemplate(rolOptionsHtml) {
                 R
             </div>
             <h3 class="text-xl font-bold text-slate-800">Registrarse</h3>
-            <p class="text-xs text-slate-400 mt-1 font-medium">Crea una nueva cuenta de operador</p>
         </div>
         
         <form id="register-form" class="space-y-4">

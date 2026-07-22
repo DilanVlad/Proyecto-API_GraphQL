@@ -10,43 +10,41 @@ function generateCardHtml(a) {
         const subtotal = diffDays * d.precio_det;
         return `
             <tr>
-                <td style="padding: 6px 12px; border: 1px solid #dee2e6;">${d.codigo_dpto}</td>
-                <td style="padding: 6px 12px; border: 1px solid #dee2e6;">$${d.precio_det.toFixed(2)}</td>
-                <td style="padding: 6px 12px; border: 1px solid #dee2e6;">${formatDate(d.fecha_inicio_det)}</td>
-                <td style="padding: 6px 12px; border: 1px solid #dee2e6;">${formatDate(d.fecha_fin_det)}</td>
-                <td style="padding: 6px 12px; border: 1px solid #dee2e6; text-align: center;">${diffDays}</td>
-                <td style="padding: 6px 12px; border: 1px solid #dee2e6; text-align: right; font-weight: bold;">$${subtotal.toFixed(2)}</td>
+                <td style="padding: 4px 8px; border: 1px solid #000;">${d.codigo_dpto}</td>
+                <td style="padding: 4px 8px; border: 1px solid #000;">$${d.precio_det.toFixed(2)}</td>
+                <td style="padding: 4px 8px; border: 1px solid #000;">${formatDate(d.fecha_inicio_det)}</td>
+                <td style="padding: 4px 8px; border: 1px solid #000;">${formatDate(d.fecha_fin_det)}</td>
+                <td style="padding: 4px 8px; border: 1px solid #000; text-align: center;">${diffDays}</td>
+                <td style="padding: 4px 8px; border: 1px solid #000; text-align: right;">$${subtotal.toFixed(2)}</td>
             </tr>
         `;
-    }).join('') : '<tr><td colspan="6" style="padding: 8px; text-align: center;">Sin detalles</td></tr>';
+    }).join('') : '<tr><td colspan="6" style="padding: 4px 8px; border: 1px solid #000; text-align: center;">Sin detalles</td></tr>';
 
     return `
-        <div style="border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 20px; background-color: #fff; box-sizing: border-box; overflow: hidden; page-break-inside: avoid;">
-            <div style="background-color: #f8f9fa; padding: 10px 15px; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; font-weight: bold;">
-                <div style="color: #0d6efd; font-size: 0.9rem;">
-                    Código Alquiler: ${a.cod_alq} <span style="font-weight: normal; color: #6c757d; font-size: 0.8rem; margin-left: 5px;">(${formatDate(a.fecha_alq)})</span>
+        <div style="margin-bottom: 20px; page-break-inside: avoid;">
+            <div style="padding: 4px 0; display: flex; justify-content: space-between; align-items: center; font-weight: bold;">
+                <div>
+                    Código Alquiler: ${a.cod_alq} <span style="font-weight: normal; margin-left: 5px;">(${formatDate(a.fecha_alq)})</span>
                 </div>
-                <div style="color: #198754; font-size: 0.95rem;">$${a.total_alq.toFixed(2)}</div>
+                <div>Total: $${a.total_alq.toFixed(2)}</div>
             </div>
-            <div style="padding: 10px;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: left;">
-                    <thead>
-                        <tr style="background-color: #e9ecef; border-bottom: 1px solid #dee2e6; font-weight: bold;">
-                            <th style="padding: 6px 12px;">Dpto</th>
-                            <th style="padding: 6px 12px;">Precio/Día</th>
-                            <th style="padding: 6px 12px;">Inicio</th>
-                            <th style="padding: 6px 12px;">Fin</th>
-                            <th style="padding: 6px 12px; text-align: center;">Días</th>
-                            <th style="padding: 6px 12px; text-align: right;">Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${subtableRows}
-                    </tbody>
-                </table>
-            </div>
-            <div style="background-color: #fff; padding: 6px 15px; border-top: 1px dashed #dee2e6; text-align: right;">
-                <small style="color: #6c757d; font-size: 0.75rem;">Registrado por: ${a.usuario ? a.usuario.username_usr : 'N/A'}</small>
+            <table style="width: 100%; border-collapse: collapse; font-size: 10pt; text-align: left; margin-bottom: 4px;">
+                <thead>
+                    <tr>
+                        <th style="padding: 4px 8px; border: 1px solid #000;">Dpto</th>
+                        <th style="padding: 4px 8px; border: 1px solid #000;">Precio/Día</th>
+                        <th style="padding: 4px 8px; border: 1px solid #000;">Inicio</th>
+                        <th style="padding: 4px 8px; border: 1px solid #000;">Fin</th>
+                        <th style="padding: 4px 8px; border: 1px solid #000; text-align: center;">Días</th>
+                        <th style="padding: 4px 8px; border: 1px solid #000; text-align: right;">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${subtableRows}
+                </tbody>
+            </table>
+            <div style="text-align: right;">
+                <span style="font-size: 9pt;">Registrado por: ${a.usuario ? a.usuario.username_usr : 'N/A'}</span>
             </div>
         </div>
     `;
@@ -61,10 +59,10 @@ export function printGeneralPDF(totalIngresos, totalAlquileres, totalDptos, tota
 
     let generalTableRows = clientsList.map(c => `
         <tr>
-            <td style="padding: 8px 12px; border: 1px solid #dee2e6;"><strong>${c.persona.cedula_per}</strong></td>
-            <td style="padding: 8px 12px; border: 1px solid #dee2e6;">${c.persona.nombres_per} ${c.persona.apellidos_per}</td>
-            <td style="padding: 8px 12px; border: 1px solid #dee2e6; text-align: center;">${c.alquileres.length}</td>
-            <td style="padding: 8px 12px; border: 1px solid #dee2e6; text-align: right; font-weight: bold; color: #198754;">$${c.totalSpent.toFixed(2)}</td>
+            <td style="padding: 6px 8px; border: 1px solid #000;">${c.persona.cedula_per}</td>
+            <td style="padding: 6px 8px; border: 1px solid #000;">${c.persona.nombres_per} ${c.persona.apellidos_per}</td>
+            <td style="padding: 6px 8px; border: 1px solid #000; text-align: center;">${c.alquileres.length}</td>
+            <td style="padding: 6px 8px; border: 1px solid #000; text-align: right;">$${c.totalSpent.toFixed(2)}</td>
         </tr>
     `).join('');
 
@@ -72,50 +70,38 @@ export function printGeneralPDF(totalIngresos, totalAlquileres, totalDptos, tota
     let detailSectionHtml = clientsList.map(c => {
         let cardsHtml = c.alquileres.map(a => generateCardHtml(a)).join('');
         return `
-            <div style="margin-top: 25px; page-break-inside: avoid;">
-                <h5 style="color: #495057; border-bottom: 2px solid #6c757d; padding-bottom: 5px; margin-bottom: 15px;">
-                    Cliente: <strong>${c.persona.nombres_per} ${c.persona.apellidos_per}</strong> (${c.persona.cedula_per})
-                </h5>
+            <div style="margin-top: 20px; page-break-inside: avoid;">
+                <div style="border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 10px;">
+                    <strong>Cliente:</strong> ${c.persona.nombres_per} ${c.persona.apellidos_per} (${c.persona.cedula_per})
+                </div>
                 ${cardsHtml}
             </div>
         `;
     }).join('');
 
     genTemplate.innerHTML = `
-        <div style="font-family: Arial, sans-serif; padding: 25px; color: #333; background-color: #fff;">
-            <div style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
-                <h3 style="margin: 0; color: #212529; text-transform: uppercase;">Reporte General Consolidado de Alquileres</h3>
-                <small style="color: #6c757d;">Fecha de Generación: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</small>
+        <div style="font-family: Arial, sans-serif; font-size: 11pt; padding: 15px; color: #000; background-color: #fff;">
+            <div style="text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 14pt;">REPORTE GENERAL CONSOLIDADO DE ALQUILERES</h3>
+                <div style="margin-top: 5px;">Fecha de Generación: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</div>
             </div>
             
-            <!-- KPI CARDS -->
-            <div style="display: flex; justify-content: space-between; margin-bottom: 25px; text-align: center; gap: 10px;">
-                <div style="flex: 1; padding: 10px; border: 1px solid #dee2e6; background-color: #f8f9fa; border-radius: 4px;">
-                    <span style="font-size: 0.7rem; text-transform: uppercase; color: #6c757d; display: block; font-weight: bold; margin-bottom: 5px;">Ingresos Totales</span>
-                    <strong style="font-size: 1.25rem; color: #198754;">$${totalIngresos.toFixed(2)}</strong>
-                </div>
-                <div style="flex: 1; padding: 10px; border: 1px solid #dee2e6; background-color: #f8f9fa; border-radius: 4px;">
-                    <span style="font-size: 0.7rem; text-transform: uppercase; color: #6c757d; display: block; font-weight: bold; margin-bottom: 5px;">Alquileres Totales</span>
-                    <strong style="font-size: 1.25rem; color: #0d6efd;">${totalAlquileres}</strong>
-                </div>
-                <div style="flex: 1; padding: 10px; border: 1px solid #dee2e6; background-color: #f8f9fa; border-radius: 4px;">
-                    <span style="font-size: 0.7rem; text-transform: uppercase; color: #6c757d; display: block; font-weight: bold; margin-bottom: 5px;">Dptos. Reservados</span>
-                    <strong style="font-size: 1.25rem; color: #ffc107;">${totalDptos}</strong>
-                </div>
-                <div style="flex: 1; padding: 10px; border: 1px solid #dee2e6; background-color: #f8f9fa; border-radius: 4px;">
-                    <span style="font-size: 0.7rem; text-transform: uppercase; color: #6c757d; display: block; font-weight: bold; margin-bottom: 5px;">Clientes Activos</span>
-                    <strong style="font-size: 1.25rem; color: #0dcaf0;">${totalClientes}</strong>
-                </div>
+            <!-- KPI CARDS AS SIMPLE TEXT -->
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; border: 1px solid #000; padding: 10px;">
+                <div><strong>Ingresos Totales:</strong> $${totalIngresos.toFixed(2)}</div>
+                <div><strong>Alquileres Totales:</strong> ${totalAlquileres}</div>
+                <div><strong>Dptos. Reservados:</strong> ${totalDptos}</div>
+                <div><strong>Clientes Activos:</strong> ${totalClientes}</div>
             </div>
             
-            <h4 style="border-bottom: 1.5px solid #dee2e6; padding-bottom: 5px; color: #212529; font-size: 1.1rem; margin-bottom: 10px;">Resumen de Facturación por Cliente</h4>
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 0.85rem; border: 1px solid #dee2e6;">
+            <div style="font-weight: bold; margin-bottom: 8px;">Resumen de Facturación por Cliente</div>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 10pt;">
                 <thead>
-                    <tr style="background-color: #e9ecef; text-align: left; font-weight: bold; border-bottom: 1px solid #dee2e6;">
-                        <th style="padding: 8px 12px; border: 1px solid #dee2e6;">Cédula</th>
-                        <th style="padding: 8px 12px; border: 1px solid #dee2e6;">Nombres y Apellidos</th>
-                        <th style="padding: 8px 12px; border: 1px solid #dee2e6; text-align: center;">Cant. Alquileres</th>
-                        <th style="padding: 8px 12px; border: 1px solid #dee2e6; text-align: right;">Total Facturado</th>
+                    <tr>
+                        <th style="padding: 6px 8px; border: 1px solid #000; text-align: left;">Cédula</th>
+                        <th style="padding: 6px 8px; border: 1px solid #000; text-align: left;">Nombres y Apellidos</th>
+                        <th style="padding: 6px 8px; border: 1px solid #000; text-align: center;">Cant. Alquileres</th>
+                        <th style="padding: 6px 8px; border: 1px solid #000; text-align: right;">Total Facturado</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,7 +109,7 @@ export function printGeneralPDF(totalIngresos, totalAlquileres, totalDptos, tota
                 </tbody>
             </table>
 
-            <h4 style="border-bottom: 1.5px solid #dee2e6; padding-bottom: 5px; color: #212529; font-size: 1.1rem; margin-bottom: 10px; margin-top: 20px;">Historial General de Transacciones por Cliente</h4>
+            <div style="font-weight: bold; margin-bottom: 10px;">Historial General de Transacciones por Cliente</div>
             ${detailSectionHtml}
         </div>
     `;
@@ -145,31 +131,31 @@ export function printIndividualPDF(client) {
     const cardsHtml = client.alquileres.map(a => generateCardHtml(a)).join('');
 
     indTemplate.innerHTML = `
-        <div style="font-family: Arial, sans-serif; padding: 25px; color: #333; background-color: #fff;">
-            <div style="text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
-                <h3 style="margin: 0; color: #212529; text-transform: uppercase; letter-spacing: 1px;">ESTADO DE CUENTA E HISTORIAL</h3>
-                <h5 style="margin: 5px 0 0 0; color: #6c757d; font-weight: normal;">Ficha Histórica del Cliente</h5>
-                <small style="color: #6c757d; display: block; margin-top: 5px;">Generado el: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</small>
+        <div style="font-family: Arial, sans-serif; font-size: 11pt; padding: 15px; color: #000; background-color: #fff;">
+            <div style="text-align: center; border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 14pt;">ESTADO DE CUENTA E HISTORIAL</h3>
+                <h5 style="margin: 5px 0 0 0; font-weight: normal;">Ficha Histórica del Cliente</h5>
+                <div style="margin-top: 5px;">Generado el: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</div>
             </div>
 
             <!-- CLIENT BOX -->
-            <div style="display: flex; justify-content: space-between; border: 1px solid #dee2e6; border-radius: 4px; padding: 15px; background-color: #f8f9fa; margin-bottom: 25px; font-size: 0.85rem; gap: 20px; box-sizing: border-box;">
+            <div style="display: flex; justify-content: space-between; border: 1px solid #000; padding: 10px; margin-bottom: 20px;">
                 <div style="flex: 1;">
-                    <span style="font-size: 0.7rem; text-transform: uppercase; color: #6c757d; display: block; font-weight: bold; margin-bottom: 5px;">DATOS DEL CLIENTE</span>
-                    <strong style="font-size: 1.05rem; display: block; margin-bottom: 5px; color: #212529;">${client.persona.nombres_per} ${client.persona.apellidos_per}</strong>
-                    <span style="color: #495057;">C.I. / RUC: <strong>${client.persona.cedula_per}</strong></span><br>
-                    ${client.persona.telefono_per ? `<span style="color: #495057;">Teléfono: ${client.persona.telefono_per}</span><br>` : ''}
-                    ${client.persona.direccion_per ? `<span style="color: #495057;">Dirección: ${client.persona.direccion_per}</span>` : ''}
+                    <div style="font-weight: bold; margin-bottom: 5px; text-decoration: underline;">DATOS DEL CLIENTE</div>
+                    <div><strong>${client.persona.nombres_per} ${client.persona.apellidos_per}</strong></div>
+                    <div>C.I. / RUC: <strong>${client.persona.cedula_per}</strong></div>
+                    ${client.persona.telefono_per ? `<div>Teléfono: ${client.persona.telefono_per}</div>` : ''}
+                    ${client.persona.direccion_per ? `<div>Dirección: ${client.persona.direccion_per}</div>` : ''}
                 </div>
-                <div style="flex: 1; border-left: 2px solid #dee2e6; padding-left: 20px;">
-                    <span style="font-size: 0.7rem; text-transform: uppercase; color: #6c757d; display: block; font-weight: bold; margin-bottom: 5px;">RESUMEN DE FACTURACIÓN</span>
-                    <span style="color: #495057; display: block; margin-bottom: 3px;">Cant. Alquileres: <strong>${client.alquileres.length}</strong></span>
-                    <span style="font-size: 0.95rem; color: #495057; display: block;">Monto Total Facturado: <strong style="color: #198754;">$${client.totalSpent.toFixed(2)}</strong></span>
+                <div style="flex: 1; border-left: 1px solid #000; padding-left: 15px;">
+                    <div style="font-weight: bold; margin-bottom: 5px; text-decoration: underline;">RESUMEN DE FACTURACIÓN</div>
+                    <div>Cant. Alquileres: <strong>${client.alquileres.length}</strong></div>
+                    <div style="font-size: 12pt; margin-top: 5px;">Monto Total Facturado: <strong>$${client.totalSpent.toFixed(2)}</strong></div>
                 </div>
             </div>
 
             <!-- DETAILED CARDS -->
-            <h4 style="border-bottom: 1.5px solid #dee2e6; padding-bottom: 5px; color: #212529; font-size: 1.1rem; margin-bottom: 15px;">Alquileres Registrados</h4>
+            <div style="font-weight: bold; margin-bottom: 10px;">Alquileres Registrados</div>
             ${cardsHtml}
         </div>
     `;
