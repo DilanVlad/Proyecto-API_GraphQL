@@ -81,7 +81,7 @@ async function loadListView() {
                 `;
 
                 if (canEdit) tr.querySelector('.btn-editar').addEventListener('click', () => showForm(u));
-                if (canDelete) tr.querySelector('.btn-eliminar').addEventListener('click', () => handleDelete(u.id_usr));
+                if (canDelete) tr.querySelector('.btn-eliminar').addEventListener('click', () => handleDelete(u));
                 return tr;
             }
         });
@@ -126,10 +126,22 @@ function showForm(usuario = null) {
     });
 }
 
-async function handleDelete(id_usr) {
-    if (confirm(`¿Estás seguro de que deseas eliminar el usuario con ID ${id_usr}?`)) {
+async function handleDelete(usuario) {
+    const currentUserId = parseInt(sessionStorage.getItem('userId'), 10) || parseInt(localStorage.getItem('userId'), 10);
+    
+    if (usuario.id_usr === currentUserId) {
+        alert('Acción denegada: No puedes eliminar tu propia cuenta mientras tienes sesión iniciada.');
+        return;
+    }
+
+    if (usuario.rol && usuario.rol.nombre_rol.toLowerCase() === 'administrador') {
+        alert('Acción denegada: Por seguridad, no se puede eliminar a un usuario Administrador.');
+        return;
+    }
+
+    if (confirm(`¿Estás seguro de que deseas eliminar el usuario "${usuario.username_usr}"?`)) {
         try {
-            await deleteUsuarioMutation(id_usr);
+            await deleteUsuarioMutation(usuario.id_usr);
             loadListView();
         } catch (err) {
             alert('No se pudo eliminar el usuario seleccionado: ' + err.message);
