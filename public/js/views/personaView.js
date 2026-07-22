@@ -77,12 +77,12 @@ export function personaFormTemplate(persona = null) {
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                         <label for="cedula_per" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Cédula / RUC</label>
-                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="cedula_per" required maxlength="13" 
+                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="cedula_per" required minlength="10" maxlength="13" 
                                value="${isEdit ? persona.cedula_per : ''}" ${isEdit ? 'readonly class="bg-slate-100 text-slate-500 cursor-not-allowed"' : ''}>
                     </div>
                     <div>
                         <label for="telefono_per" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Teléfono</label>
-                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="telefono_per" required maxlength="10" value="${isEdit ? persona.telefono_per : ''}">
+                        <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="telefono_per" required minlength="10" maxlength="10" value="${isEdit ? persona.telefono_per : ''}">
                     </div>
                 </div>
                 

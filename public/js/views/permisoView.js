@@ -75,7 +75,7 @@ export function rolFormTemplate(rol = null) {
                     <form id="rol-modal-form" class="space-y-4">
                         <div>
                             <label for="nombre_rol" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nombre del Rol</label>
-                            <input type="text" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="nombre_rol" required value="${isEdit ? rol.nombre_rol : ''}" placeholder="Ej. Operativo">
+                            <input type="text" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]/g, '')" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="nombre_rol" required value="${isEdit ? rol.nombre_rol : ''}" placeholder="Ej. Operativo">
                         </div>
                         <div id="modal-error" class="hidden p-3 text-xs font-semibold rounded-xl bg-rose-50 border border-rose-100 text-rose-600 mt-2"></div>
                         <div class="flex items-center justify-end space-x-3 pt-4 border-t border-slate-100">
@@ -104,7 +104,7 @@ export function funcionFormTemplate(funcion = null) {
                     <form id="funcion-modal-form" class="space-y-4">
                         <div>
                             <label for="nombre_fnc" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nombre de la Función</label>
-                            <input type="text" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="nombre_fnc" required value="${isEdit ? funcion.nombre_fnc : ''}" placeholder="Ej. Personas">
+                            <input type="text" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]/g, '')" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="nombre_fnc" required value="${isEdit ? funcion.nombre_fnc : ''}" placeholder="Ej. Personas">
                         </div>
                         <div>
                             <label for="ruta_fnc" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Ruta de la Función</label>

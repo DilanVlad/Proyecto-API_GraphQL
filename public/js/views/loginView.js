@@ -9,8 +9,8 @@ export function loginFormTemplate() {
         
         <form id="login-form" class="space-y-4">
             <div>
-                <label for="username" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Usuario</label>
-                <input type="text" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="username" required placeholder="Ingresa tu usuario">
+                <label for="username" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nombre de Usuario</label>
+                <input type="text" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]/g, '')" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="username" required placeholder="Ingresa tu usuario">
             </div>
             <div>
                 <label for="password" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Contraseña</label>
@@ -40,7 +40,7 @@ export function registerFormTemplate(rolOptionsHtml) {
         <form id="register-form" class="space-y-4">
             <div>
                 <label for="reg-username" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nombre de Usuario</label>
-                <input type="text" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="reg-username" required placeholder="Crea tu usuario">
+                <input type="text" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]/g, '')" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="reg-username" required placeholder="Crea tu usuario">
             </div>
             <div>
                 <label for="reg-password" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Contraseña</label>

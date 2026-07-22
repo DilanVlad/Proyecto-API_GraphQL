@@ -86,7 +86,7 @@ export function usuarioFormTemplate(usuario, rolOptionsHtml) {
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                         <label for="username_usr" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nombre de Usuario</label>
-                        <input type="text" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="username_usr" required value="${usuario.username_usr}">
+                        <input type="text" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]/g, '')" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 text-sm transition-all bg-slate-50/50" id="username_usr" required value="${usuario.username_usr}">
                     </div>
                     <div>
                         <label for="id_rol" class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Rol del Usuario</label>
